@@ -4,7 +4,6 @@ const port = 3000;
 const path = require("path");
 const mongoose = require("mongoose");
 const methodOverride = require("method-override");
-
 const Campground = require('./models/campground');
 
 
@@ -20,7 +19,7 @@ db.once("open", () => {
 app.set("view engine", "ejs");
 app.set("views", path.join(__dirname, "/views"));
 
-app.use(express.urlencoded({ extended: true }))
+app.use(express.urlencoded({ extended: true }))  // for post request
 app.use(methodOverride('_method'));  // '_method' can be editted, but in the form action it has to be matched
 
 
@@ -28,16 +27,18 @@ app.get('/', (req, res) => {
     res.render('home')
 })
 
+// list of campgrounds
 app.get('/campgrounds', async (req, res) => {
     const campgrounds = await Campground.find({});
     res.render('campgrounds/index', { campgrounds })
 })
 
+// campground creation page
 app.get('/campgrounds/new', (req, res) => {
     res.render('campgrounds/new')
 })
 
-// create a campground
+// create a campground via a form
 app.post('/campgrounds', async (req, res) => {
     // ceate a new campground model for every new campground
     const campground = new Campground(req.body.campground)
@@ -51,18 +52,20 @@ app.get('/campgrounds/:id', async (req, res) => {
     res.render('campgrounds/show', { campground })
 })
 
+// campground edit page
 app.get('/campgrounds/:id/edit', async (req, res) => {
     const campground = await Campground.findById(req.params.id)
     res.render('campgrounds/edit', { campground })
 })
 
-// for updating campground
+// update campground
 app.put('/campgrounds/:id', async (req, res) => {
     const { id } = req.params;
     const campground = await Campground.findByIdAndUpdate(id, {...req.body.campground})
     res.redirect(`/campgrounds/${campground._id}`)
 })
 
+// delete campground
 app.delete('/campgrounds/:id', async (req, res) => {
     const { id } = req.params;
     await Campground.findByIdAndDelete(id);

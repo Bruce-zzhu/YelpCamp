@@ -14,6 +14,7 @@ db.once("open", () => {
 // pick a random element from an array
 const sample = (array) => array[Math.floor(Math.random() * array.length)];
 
+// store campgrounds into database
 const seedDB = async () => {
     await Campground.deleteMany({})
     for(let i = 0; i < 50; i++) {
