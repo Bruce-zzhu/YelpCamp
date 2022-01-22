@@ -3,6 +3,7 @@ const app = express();
 const port = 3000;
 const path = require("path");
 const mongoose = require("mongoose");
+const ejsMate = require("ejs-mate");
 const methodOverride = require("method-override");
 const Campground = require('./models/campground');
 
@@ -21,6 +22,7 @@ app.set("views", path.join(__dirname, "/views"));
 
 app.use(express.urlencoded({ extended: true }))  // for post request
 app.use(methodOverride('_method'));  // '_method' can be editted, but in the form action it has to be matched
+app.engine('ejs', ejsMate)  // use the ejs-mate engine
 
 
 app.get('/', (req, res) => {
