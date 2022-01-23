@@ -22,7 +22,7 @@ const seedDB = async () => {
         const random1000 = Math.floor(Math.random() * 1000);   // a random city (out of 1000 cities)
         const randPrice = Math.floor(Math.random() + 20) + 10;
         // https://api.unsplash.com/photos/random?collections=483251&client_id=05T3GxU3h_nKIVb5iXLnuxP9CDvGDcEgk_i4qjpXJDo
-        const image = await axios.get('https://api.pexels.com/v1/photos/2422265')
+        const image = await axios.get('https://api.pexels.com/v1/photos/1687845')
                             .then(res => {
                                 return res.data.src.large
                             })
@@ -34,7 +34,7 @@ const seedDB = async () => {
             title: `${sample(descriptors)} ${sample(places)}`,
             location: `${cities[random1000].city}, ${cities[random1000].state}`,
             image: image,
-            description: 'lalalalala',
+            description: 'Lorem ipsum, dolor sit amet consectetur adipisicing elit. Nihil sapiente nisi possimus commodi. Quaerat adipisci tempora sunt a praesentium libero fugiat voluptas aliquid illo quasi laborum, possimus nesciunt nobis impedit. ',
             price: randPrice
         })
         await camp.save()
