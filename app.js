@@ -6,6 +6,7 @@ const mongoose = require("mongoose");
 const ejsMate = require("ejs-mate");
 const methodOverride = require("method-override");
 const Campground = require('./models/campground');
+const Review = require('./models/review');
 
 
 mongoose.connect('mongodb://localhost:27017/yelp-camp')
@@ -52,6 +53,11 @@ app.post('/campgrounds', async (req, res) => {
 app.get('/campgrounds/:id', async (req, res) => {
     const campground = await Campground.findById(req.params.id)
     res.render('campgrounds/show', { campground })
+})
+
+// submit review
+app.post('/campgrounds/:id/reviews', async (req, res) => {
+    
 })
 
 // campground edit page
