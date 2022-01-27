@@ -3,6 +3,8 @@
  */
 
 const mongoose = require("mongoose");
+const { campgroundSchema } = require("../joiSchemas");
+const Review = require("./review");
 const Schema = mongoose.Schema;
 
 const CampgroundSchema = new Schema({
@@ -20,6 +22,15 @@ const CampgroundSchema = new Schema({
     ]
 });
 
-
+// delete the reviews while deleting the campground
+CampgroundSchema.post('findOneAndDelete', async function(campground) {
+    if(campground) {
+        await Review.remove({
+            _id: {
+                $in: campground.reviews
+            }
+        })
+    }
+})
 
 module.exports = mongoose.model('Campground', CampgroundSchema);

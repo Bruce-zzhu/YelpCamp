@@ -8,7 +8,7 @@ const methodOverride = require("method-override");
 const Campground = require('./models/campground');
 const catchAsync = require("./utils/catchAsync");
 const ExpressError = require("./utils/ExpressError");
-const Joi = require("joi");
+const { campgroundSchema, reviewSchema } = require("./joiSchemas");
 const Review = require('./models/review');
 
 
@@ -32,16 +32,6 @@ app.engine('ejs', ejsMate)  // use the ejs-mate engine
 
 // validate data with joi
 const validateCampground = (req, res, next) => {
-    // define joi schema
-    const campgroundSchema = Joi.object({
-        campground: Joi.object({
-            title: Joi.string().required(),
-            price: Joi.number().required().min(0),
-            image: Joi.string().required(),
-            location: Joi.string().required(),
-            description: Joi.string().required()
-        }).required()
-    })
     const { error } = campgroundSchema.validate(req.body)
     if(error) {
         // map over the element of each obj and return message
@@ -51,6 +41,18 @@ const validateCampground = (req, res, next) => {
         next()
     }
 }
+
+const validateReview = (req, res, next) => {
+    const { error } = reviewSchema.validate(req.body)
+    if(error) {
+        // map over the element of each obj and return message
+        const msg = error.details.map(el => el.message).join(',')
+        throw new ExpressError(msg, 400)
+    } else {
+        next()
+    }
+}
+
 
 app.get('/', (req, res) => {
     res.render('home')
@@ -75,15 +77,29 @@ app.post('/campgrounds', validateCampground, catchAsync(async (req, res, next) =
     res.redirect(`/campgrounds/${campground._id}`)
 }))
 
+// campground show page
 // order matters, this one cannot be above "campgrounds/new"
 app.get('/campgrounds/:id', catchAsync(async (req, res) => {
-    const campground = await Campground.findById(req.params.id)
+    const campground = await Campground.findById(req.params.id).populate('reviews')
     res.render('campgrounds/show', { campground })
 }))
 
 // submit review
-app.post('/campgrounds/:id/reviews', catchAsync(async (req, res) => {
-    
+app.post('/campgrounds/:id/reviews', validateReview, catchAsync(async (req, res) => {
+    const campground = await Campground.findById(req.params.id);
+    const review = new Review(req.body.review);
+    campground.reviews.push(review);
+    await review.save();
+    await campground.save();
+    res.redirect(`/campgrounds/${campground._id}`)
+}))
+
+app.delete('/campgrounds/:id/reviews/:reviewId', catchAsync(async (req, res) => {
+    const { id, reviewId } = req.params
+    await Review.findByIdAndDelete(reviewId);
+    // delete the reference in campground.reviews
+    await Campground.findByIdAndUpdate(id,  {$pull: {reviews: reviewId}})
+    res.redirect(`/campgrounds/${id}`)
 }))
 
 // campground edit page
