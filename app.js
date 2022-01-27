@@ -24,11 +24,11 @@ db.once("open", () => {
 
 app.set("view engine", "ejs");
 app.set("views", path.join(__dirname, "/views"));
+app.engine('ejs', ejsMate)  // use the ejs-mate engine
 
 app.use(express.urlencoded({ extended: true }))  // for post request
 app.use(methodOverride('_method'));  // '_method' can be editted, but in the form action it has to be matched
-app.engine('ejs', ejsMate)  // use the ejs-mate engine
-
+app.use(express.static('public'));
 
 // validate data with joi
 const validateCampground = (req, res, next) => {
