@@ -139,5 +139,5 @@ app.use((err, req, res, next) => {
 
 
 app.listen(port, () => {
-    console.log(`Listen on http://localhost:${port}/campgrounds`)
+    console.log(`Listen on http://localhost:${port}`)
 })
