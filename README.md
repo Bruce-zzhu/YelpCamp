@@ -1,5 +1,9 @@
 # YelpCamp
-A website that shows meaningless campgrounds for fun 🏕
+A website where users can create and review campgrounds 🏕
+
+## Current Features
+<li>Users can create, edit, and remove campgrounds</li>
+<li>Users can review campgrounds once, and edit or remove their review</li>
 
 ## To Run Locally
 1. Have [Node.js](https://nodejs.org/en/download/) and [MongoDB](https://www.mongodb.com/try/download/community) installed on your laptop
