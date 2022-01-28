@@ -1,7 +1,7 @@
 # YelpCamp
 A website that shows meaningless campgrounds for fun 🏕
 
-## To Run
+## To Run Locally
 1. Have [Node.js](https://nodejs.org/en/download/) and [MongoDB](https://www.mongodb.com/try/download/community) installed on your laptop
 2. Load data to MongoDB(yelp-camp)
 ```
