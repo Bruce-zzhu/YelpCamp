@@ -8,9 +8,13 @@ const methodOverride = require("method-override");
 const ExpressError = require("./utils/ExpressError");
 const session = require('express-session');
 const flash = require('connect-flash');
+const passport = require('passport');
+const LocalStrategy = require('passport-local');
+const User = require('./models/user');
 
-const campgrounds = require('./routes/campgrounds');
-const reviews = require('./routes/reviews');
+const campgroundRoutes = require('./routes/campgrounds');
+const reviewRoutes = require('./routes/reviews');
+const userRoutes = require('./routes/users');
 
 
 
@@ -31,6 +35,7 @@ app.use(express.urlencoded({ extended: true }))  // for post request
 app.use(methodOverride('_method'));  // '_method' can be editted, but in the form action it has to be matched
 app.use(express.static(path.join(__dirname, 'public')));
 
+
 // set up cookie session
 const sessionConfig = {
     secret: 'thisisasecret',
@@ -45,16 +50,28 @@ const sessionConfig = {
 app.use(session(sessionConfig))
 app.use(flash())
 
+// passport middleware 
+app.use(passport.initialize());
+app.use(passport.session());
+passport.use(new LocalStrategy(User.authenticate()))
+
+passport.serializeUser(User.serializeUser());
+passport.deserializeUser(User.deserializeUser());
+
+
 // middleware for flash
 app.use((req, res, next) => {
+    res.locals.currentUser = req.user;
     res.locals.success = req.flash('success');
     res.locals.error = req.flash('error');
     next();
 })
 
-app.use('/campgrounds', campgrounds);
-app.use('/campgrounds/:id/reviews', reviews);
 
+// routes middleware 
+app.use('/campgrounds', campgroundRoutes);
+app.use('/campgrounds/:id/reviews', reviewRoutes);
+app.use('/', userRoutes);
 
 
 
