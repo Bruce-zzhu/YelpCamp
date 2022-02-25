@@ -3,6 +3,7 @@
 A website where users can create and review campgrounds 🏕
 
 ## Current Features
+<li>Users can only browse campgrounds without logging in</li>
 <li>Users can create, edit, and remove campgrounds</li>
 <li>Users can review campgrounds and edit or remove their review</li>
 
