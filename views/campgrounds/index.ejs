@@ -14,7 +14,11 @@
             <div class="card mb-3">
                 <div class="row">
                     <div class="col-md-4">
+                        <% if (cg.image.length) { %> 
                         <img class="img-fluid" alt="" src="<%= cg.image %>">
+                        <% } else { %>
+                        <img class="img-fluid" alt="" src="https://images.unsplash.com/photo-1500498036565-cdf5d84e5393?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=MnwyOTM1Mzl8MHwxfHJhbmRvbXx8fHx8fHx8fDE2NDU5MjIyNTc&ixlib=rb-1.2.1&q=80&w=400">
+                        <% } %>  
                     </div>
                     <div class="col-md-8">
                         <div class="card-body">
