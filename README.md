@@ -9,7 +9,7 @@ A website where users can create and review campgrounds 🏕
 
 ## To Run Locally
 1. Have [Node.js](https://nodejs.org/en/download/) and [MongoDB](https://www.mongodb.com/try/download/community) installed on your laptop
-2. Load data into MongoDB(yelp-camp), it may take half a minute for the first time
+2. Load data into MongoDB(yelp-camp)
 ```
 node seeds/index.js
 ```
