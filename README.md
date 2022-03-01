@@ -3,9 +3,11 @@
 A website where users can create and review campgrounds 🏕
 
 ## Current Features
-<li>Users can only browse campgrounds without logging in</li>
-<li>Users can create, edit, and remove campgrounds</li>
-<li>Users can review campgrounds and edit or remove their review</li>
+<li>Withou logging in, users can only browse campgrounds</li>
+<li>Users can interact with the map</li>
+<li>After logging in, users can create, edit, and remove campgrounds</li>
+<li>Users can review campgrounds or remove their reviews</li>
+
 
 ## To Run Locally
 1. Have [Node.js](https://nodejs.org/en/download/) and [MongoDB](https://www.mongodb.com/try/download/community) installed on your laptop
