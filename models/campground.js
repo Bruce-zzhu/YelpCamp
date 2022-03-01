@@ -7,6 +7,9 @@ const { campgroundSchema } = require("../joiSchemas");
 const Review = require("./review");
 const Schema = mongoose.Schema;
 
+// make mongoose support virtual
+const opts = {toJSON: {virtuals: true}}
+
 const CampgroundSchema = new Schema({
     title: String,
     image: String,
@@ -35,7 +38,12 @@ const CampgroundSchema = new Schema({
             ref: 'Review'
         }
     ]
-});
+}, opts);
+
+// add properties for map functions
+CampgroundSchema.virtual('properties.popUpMarkup').get(function () {
+    return `<strong><a href="/campgrounds/${this._id}">${this.title}</a></strong>`
+})
 
 // delete the reviews while deleting the campground
 CampgroundSchema.post('findOneAndDelete', async function(campground) {
