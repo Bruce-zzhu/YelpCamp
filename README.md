@@ -1,6 +1,6 @@
 # YelpCamp
 ![home page image](image.png)
-A website where users can create and review campgrounds 🏕
+YelpCamp is a website where users can create and review campgrounds. In order to review or create a campground, you must have an account. This project was part of Colt Steele's web dev course on udemy.
 
 ## Current Features
 <li>Withou logging in, users can only browse campgrounds</li>
