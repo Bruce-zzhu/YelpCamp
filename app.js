@@ -1,6 +1,6 @@
 const express = require("express");
 const app = express();
-const port = 3000;
+const port = process.env.PORT || 3000;
 const path = require("path");
 const mongoose = require("mongoose");
 const ejsMate = require("ejs-mate");
@@ -16,7 +16,10 @@ const campgroundRoutes = require('./routes/campgrounds');
 const reviewRoutes = require('./routes/reviews');
 const userRoutes = require('./routes/users');
 
-mongoose.connect('mongodb://localhost:27017/yelp-camp');
+const MongoDBStore = require('connect-mongo');
+
+const dbUrl = process.env.DB_URL || 'mongodb://localhost:27017/yelp-camp'; 
+mongoose.connect(dbUrl);  
 
 const db = mongoose.connection;
 db.on("error", console.error.bind(console, "connection error:"));
@@ -33,10 +36,24 @@ app.use(express.urlencoded({ extended: true }))  // for post request
 app.use(methodOverride('_method'));  // '_method' can be editted, but in the form action it has to be matched
 app.use(express.static(path.join(__dirname, 'public')));
 
+const secret = process.env.SECRET || 'thisisasecret';
+
+const store = new MongoDBStore({
+    mongoUrl: dbUrl,
+    secret,
+    touchAfter: 24 * 60 * 60
+})
+
+
+store.on('err', function(e) {
+    console.log("SESSION STORE ERROR", e)
+})
 
 // set up cookie session
 const sessionConfig = {
-    secret: 'thisisasecret',
+    store,
+    name: 'session',
+    secret,
     resave: false,
     saveUninitialized: true,
     cookie: {
@@ -98,5 +115,5 @@ app.use((err, req, res, next) => {
 
 
 app.listen(port, () => {
-    console.log(`Listen on http://localhost:${port}`)
+    console.log(`Listen on ${port}`)
 })
