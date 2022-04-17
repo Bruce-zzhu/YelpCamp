@@ -1,5 +1,6 @@
 const mongoose = require("mongoose");
 const Campground = require('../models/campground');
+const User = require('../models/user');
 const cities = require('./cities')  // 1000 cities
 const {places, descriptors} = require('./seedHelpers')
 const axios = require("axios");
@@ -34,15 +35,27 @@ const sample = (array) => array[Math.floor(Math.random() * array.length)];
 
 // store campgrounds into database
 const seedDB = async () => {
-    await Campground.deleteMany({})
-    for (let i = 0; i < 50; i++) {
+    await Campground.deleteMany({});
+    await User.deleteMany({});
+
+    let registeredUser;
+    // default user
+    try {
+      const user = new User({email: "tim@tim.com", username: "Tim"});
+      const password = 'tim';
+      registeredUser = await User.register(user, password);
+    } catch (e) {
+      console.log(e);
+    }
+
+    for (let i = 0; i < 20; i++) {
         // setup
         const random1000 = Math.floor(Math.random() * 1000);   // a random city (out of 1000 cities)
         const randPrice = Math.floor(Math.random() + 20) + 10;
-    
+
         // seed data into campground
         const camp = new Campground({
-            author: '6206fd8fb52ff87056ea0711',
+            author: registeredUser._id.toString(),
             title: `${sample(descriptors)} ${sample(places)}`,
             location: `${cities[random1000].city}, ${cities[random1000].state}`,
             image: await seedImg(),
